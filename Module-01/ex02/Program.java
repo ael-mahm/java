@@ -3,6 +3,10 @@ class Program {
                 User mike = new User("Mike", 1, 555.0);
                 User john = new User("John", 2, 6000.0);
 
+                UsersArrayList users = new UsersArrayList();
+                users.addUser(mike);
+                users.addUser(john);
+
                 UserIdsGenerator first = UserIdsGenerator.getInstance();
                 UserIdsGenerator second = UserIdsGenerator.getInstance();
 
@@ -21,5 +25,10 @@ class Program {
                 System.out.println(
                                 "Transaction from John to Mike: ID: " + jtom.getIdentifier() + ", Amount: "
                                                 + jtom.getAmount());
+
+                System.out.println("Number if users: " + users.getNumberOfUsers());
+                System.out.println("First User by ID (1): " + users.getUserById(1).getName());
+                System.out.println("First User by Index (0): " + users.getUserByIndex(0).getName());
+
         }
 }
