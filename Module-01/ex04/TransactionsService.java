@@ -30,7 +30,50 @@ class TransactionsService {
         recipient.getTransactionsList().addTransaction(incoming);
     }
 
-    public boolean checkValidity() {
-        return false;
+    public Transaction[] checkValidity() {
+        int numberOfUsers = this.users.getNumberOfUsers();
+        int totalMatched = 0;
+        int total = 0;
+        int index = 0;
+
+        for (int i = 0; i < numberOfUsers; i++) {
+            total += this.users.getUserByIndex(i).getTransactionsList().toArray().length;
+        }
+
+        Transaction[] allTransaction = new Transaction[total];
+        boolean[] unpairedTransactions = new boolean[total];
+        for (int i = 0; i < numberOfUsers; i++) {
+            User tempUser = this.users.getUserByIndex(i);
+            Transaction[] tempTransaction = tempUser.getTransactionsList().toArray();
+            for (int j = 0; j < tempTransaction.length; j++) {
+                allTransaction[index++] = tempTransaction[j];
+            }
+        }
+
+        for (int i = 0; i < total; i++) {
+            if (unpairedTransactions[i] == true)
+                continue;
+            for (int j = i + 1; j < total; j++) {
+                if (allTransaction[i].getIdentifier().toString().equals(allTransaction[j].getIdentifier().toString())) {
+                    unpairedTransactions[i] = true;
+                    unpairedTransactions[j] = true;
+                    totalMatched++;
+                    break;
+                }
+            }
+        }
+
+        Transaction[] result = new Transaction[totalMatched * 2];
+        int j = 0;
+
+        System.out.println("total matched " + totalMatched);
+        for (int i = 0; i < total; i++) {
+            if (unpairedTransactions[i] == true) {
+                result[j] = allTransaction[i];
+                j++;
+            }
+        }
+
+        return result;
     }
 }

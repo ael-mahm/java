@@ -1,4 +1,5 @@
 import java.util.UUID;
+import java.util.Locale.Category;
 
 enum TransactionCategory {
     OUTGOING,
@@ -73,5 +74,9 @@ class Transaction {
 
     public void setNext(Transaction tran) {
         this.next = tran;
+    }
+
+    public String getTransactionCategory() {
+        return this.Type == TransactionCategory.INCOMING ? "INCOMING" : "OUTGOING";
     }
 }
