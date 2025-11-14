@@ -30,6 +30,15 @@ class TransactionsService {
         recipient.getTransactionsList().addTransaction(incoming);
     }
 
+    private boolean moreChecks(Transaction t1, Transaction t2) {
+        if ((t1.getAmount() != (-1 * t2.getAmount())) || t1.getTransactionCategory() == t2.getTransactionCategory())
+            return false;
+        if (t1.getSender().getIdentifier() != t2.getSender().getIdentifier()
+                || t1.getRecipient().getIdentifier() != t2.getRecipient().getIdentifier())
+            return false;
+        return true;
+    }
+
     public Transaction[] checkValidity() {
         int numberOfUsers = this.users.getNumberOfUsers();
         int totalMatched = 0;
@@ -54,7 +63,8 @@ class TransactionsService {
             if (unpairedTransactions[i] == true)
                 continue;
             for (int j = i + 1; j < total; j++) {
-                if (allTransaction[i].getIdentifier().toString().equals(allTransaction[j].getIdentifier().toString())) {
+                if (allTransaction[i].getIdentifier().toString().equals(allTransaction[j].getIdentifier().toString())
+                        && moreChecks(allTransaction[i], allTransaction[j])) {
                     unpairedTransactions[i] = true;
                     unpairedTransactions[j] = true;
                     totalMatched++;
@@ -66,7 +76,6 @@ class TransactionsService {
         Transaction[] result = new Transaction[totalMatched * 2];
         int j = 0;
 
-        System.out.println("total matched " + totalMatched);
         for (int i = 0; i < total; i++) {
             if (unpairedTransactions[i] == true) {
                 result[j] = allTransaction[i];
