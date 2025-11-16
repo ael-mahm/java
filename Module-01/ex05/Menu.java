@@ -135,15 +135,15 @@ class Menu {
             int id = 0;
             double amount = 0;
             String tr = "";
-            if (temp.getTransactionCategory() == "OUTGOING") {
+            if (temp.getSender().getIdentifier() == userId) {
                 tr = "To";
                 name = temp.getRecipient().getName();
                 id = temp.getRecipient().getIdentifier();
                 amount = -1 * temp.getAmount();
-            } else if (temp.getTransactionCategory() == "INCOMING") {
+            } else {
                 tr = "From";
-                name = temp.getRecipient().getName();
-                id = temp.getRecipient().getIdentifier();
+                name = temp.getSender().getName();
+                id = temp.getSender().getIdentifier();
                 amount = temp.getAmount();
             }
             user.transactionsList.removeTransactionById(uuid);
@@ -151,6 +151,13 @@ class Menu {
         } catch (Exception e) {
             System.out.println(e.getMessage());
             return;
+        }
+    }
+
+    private void checkTransferValidity() {
+        Transaction[] arr = this.service.checkValidity();
+        for (int i = 0; i < arr.length; i++) {
+            System.out.println(arr[i].getAmount());
         }
     }
 
@@ -174,6 +181,9 @@ class Menu {
                 break;
             case 5:
                 removeTransactionById();
+                break;
+            case 6:
+                checkTransferValidity();
                 break;
             default:
                 break;
