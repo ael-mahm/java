@@ -11,6 +11,10 @@ class TransactionsService {
         this.users.addUser(user);
     }
 
+    public UsersArrayList getUsers() {
+        return this.users;
+    }
+
     public double getUserBalance(int userId) {
         return users.getUserById(userId).getBalance();
     }

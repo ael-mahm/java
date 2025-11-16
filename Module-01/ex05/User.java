@@ -5,7 +5,7 @@ class User {
     private double Balance;
     TransactionsList transactionsList;
 
-    public User(String name, int identifier, double balance) {
+    public User(String name, double balance) {
         if (balance < 0) {
             System.out.println("Error: Initial balance cannot be negative value!");
             System.exit(1);
