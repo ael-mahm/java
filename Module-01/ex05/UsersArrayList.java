@@ -25,7 +25,7 @@ class UsersArrayList implements UsersList {
                 return users[i];
             }
         }
-        throw new UserNotFoundException("User with id: " + id + "not found!");
+        throw new UserNotFoundException("User with id: " + id + " not found!");
     }
 
     public User getUserByIndex(int index) {

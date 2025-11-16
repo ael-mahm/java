@@ -4,4 +4,6 @@ public interface TransactionsList {
     void removeTransactionById(String id);
 
     Transaction[] toArray();
+
+    Transaction getTransactionById(String id);
 }

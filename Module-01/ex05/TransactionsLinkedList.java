@@ -20,6 +20,18 @@ class TransactionLinkedList implements TransactionsList {
         this.size++;
     }
 
+    public Transaction getTransactionById(String id) {
+        Transaction current = this.head;
+
+        while (current != null) {
+            if (current.getIdentifier().toString().equals(id)) {
+                return current;
+            }
+            current = current.getNext();
+        }
+        throw new TransactionNotFoundException("Transaction id not found!");
+    }
+
     public void removeTransactionById(String id) {
         Transaction current = this.head;
         Transaction prev = null;
@@ -36,7 +48,7 @@ class TransactionLinkedList implements TransactionsList {
             prev = current;
             current = current.getNext();
         }
-        throw new TransactionNotFoundException("id not found!");
+        throw new TransactionNotFoundException("Transaction id not found!");
     }
 
     public Transaction[] toArray() {

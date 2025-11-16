@@ -1,3 +1,5 @@
+import java.util.UUID;
+
 import javax.swing.text.View;
 
 class Menu {
@@ -115,6 +117,43 @@ class Menu {
         }
     }
 
+    private void removeTransactionById() {
+        try {
+            System.out.println("Enter a user ID and a transfer ID");
+            java.util.Scanner scanner = new java.util.Scanner(System.in);
+            String input = scanner.nextLine();
+            String[] paths = input.split(" ");
+            if (paths.length > 2 || paths.length < 2) {
+                System.out.println("[x] Error, input should be : userID, transfer ID");
+                return;
+            }
+            int userId = Integer.parseInt(paths[0]);
+            String uuid = paths[1];
+            User user = this.service.getUsers().getUserById(userId);
+            Transaction temp = user.transactionsList.getTransactionById(uuid);
+            String name = "";
+            int id = 0;
+            double amount = 0;
+            String tr = "";
+            if (temp.getTransactionCategory() == "OUTGOING") {
+                tr = "To";
+                name = temp.getRecipient().getName();
+                id = temp.getRecipient().getIdentifier();
+                amount = -1 * temp.getAmount();
+            } else if (temp.getTransactionCategory() == "INCOMING") {
+                tr = "From";
+                name = temp.getRecipient().getName();
+                id = temp.getRecipient().getIdentifier();
+                amount = temp.getAmount();
+            }
+            user.transactionsList.removeTransactionById(uuid);
+            System.out.println("Transfer " + tr + " " + name + "(id = " + id + ") " + amount + " removed");
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            return;
+        }
+    }
+
     private void executeCommand(int numberOfCommand) {
         if (numberOfCommand == 7 || (!this.devMode && numberOfCommand == 5)) {
             System.exit(0);
@@ -132,6 +171,9 @@ class Menu {
                 break;
             case 4:
                 viewAllTransactionsForSpecificUser();
+                break;
+            case 5:
+                removeTransactionById();
                 break;
             default:
                 break;
