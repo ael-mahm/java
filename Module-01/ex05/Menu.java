@@ -53,11 +53,66 @@ class Menu {
         double userBalance;
         try {
             userBalance = this.service.getUserBalance(userId);
-        } catch (RuntimeException e) {
-            System.out.println("id not found");
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
             return;
         }
         System.out.println(this.service.getUsers().getUserById(userId).getName() + " - " + userBalance);
+    }
+
+    public void performTransfer() {
+        System.out.println("Enter a sender ID, a recipient ID, and a transfer amount");
+        java.util.Scanner scanner = new java.util.Scanner(System.in);
+        String input = scanner.nextLine();
+        String[] paths = input.split(" ");
+        if (paths.length < 3 || paths.length > 3) {
+            System.out.println("[x] Error, input should be : sender ID, recipient ID, transfer amount");
+            return;
+        }
+        int userId1 = Integer.parseInt(paths[0]);
+        int userId2 = Integer.parseInt(paths[1]);
+        int amount = Integer.parseInt(paths[2]);
+        try {
+            User sender = this.service.getUsers().getUserById(userId1);
+            User recipient = this.service.getUsers().getUserById(userId2);
+            this.service.transferTransaction(amount, userId1, userId2);
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            return;
+        }
+        System.out.println("The transfer is completed");
+    }
+
+    private void viewAllTransactionsForSpecificUser() {
+        System.out.println("Enter a user ID");
+        java.util.Scanner scanner = new java.util.Scanner(System.in);
+        String input = scanner.nextLine();
+        String[] paths = input.split(" ");
+        if (paths.length != 1) {
+            System.out.println("[x] Error, input should be : userID");
+            return;
+        }
+        int userId = Integer.parseInt(paths[0]);
+        User user;
+        try {
+            user = this.service.getUsers().getUserById(userId);
+            Transaction[] arr = user.getTransactionsList().toArray();
+            for (int i = 0; i < arr.length; i++) {
+                if (arr[i].getTransactionCategory() == "OUTGOING") {
+                    System.out.println(
+                            "TO " + arr[i].getRecipient().getName() + "(id = " + arr[i].getRecipient().getIdentifier()
+                                    + ") " + arr[i].getAmount() + " with id = " + arr[i].getIdentifier());
+                }
+                if (arr[i].getTransactionCategory() == "INCOMING") {
+                    System.out.println(
+                            "FROM " + arr[i].getSender().getName() + "(id = " + arr[i].getSender().getIdentifier()
+                                    + ") " + arr[i].getAmount() + " with id = " + arr[i].getIdentifier());
+                }
+            }
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            return;
+        }
     }
 
     private void executeCommand(int numberOfCommand) {
@@ -71,6 +126,12 @@ class Menu {
                 break;
             case 2:
                 viewUserBalances();
+                break;
+            case 3:
+                performTransfer();
+                break;
+            case 4:
+                viewAllTransactionsForSpecificUser();
                 break;
             default:
                 break;
