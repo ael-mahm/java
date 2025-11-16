@@ -156,8 +156,26 @@ class Menu {
 
     private void checkTransferValidity() {
         Transaction[] arr = this.service.checkValidity();
+        System.out.println("Check results:");
         for (int i = 0; i < arr.length; i++) {
-            System.out.println(arr[i].getAmount());
+            if (arr[i].getTransactionCategory() == "OUTGOING") {
+                System.out.println(
+                        arr[i].getSender().getName() + "(id = " +
+                                arr[i].getSender().getIdentifier() +
+                                ") has an unacknowledged transfer id = " +
+                                arr[i].getIdentifier() +
+                                " to " + arr[i].getRecipient().getName() +
+                                "(id = " + arr[i].getRecipient().getIdentifier() + ") for "
+                                + (-1 * arr[i].getAmount()));
+            } else {
+                System.out.println(
+                        arr[i].getRecipient().getName() + "(id = " +
+                                arr[i].getRecipient().getIdentifier() +
+                                ") has an unacknowledged transfer id = " +
+                                arr[i].getIdentifier() +
+                                " from " + arr[i].getSender().getName() +
+                                "(id = " + arr[i].getSender().getIdentifier() + ") for " + (arr[i].getAmount()));
+            }
         }
     }
 
