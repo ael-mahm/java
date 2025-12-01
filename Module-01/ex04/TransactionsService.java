@@ -41,7 +41,6 @@ class TransactionsService {
 
     public Transaction[] checkValidity() {
         int numberOfUsers = this.users.getNumberOfUsers();
-        int totalMatched = 0;
         int total = 0;
         int index = 0;
 
@@ -67,17 +66,22 @@ class TransactionsService {
                         && moreChecks(allTransaction[i], allTransaction[j])) {
                     unpairedTransactions[i] = true;
                     unpairedTransactions[j] = true;
-                    totalMatched++;
                     break;
                 }
             }
         }
 
-        Transaction[] result = new Transaction[totalMatched * 2];
+        int unpairedCount = 0;
+        for (int i = 0; i < total; i++) {
+            if (!unpairedTransactions[i])
+                unpairedCount++;
+        }
+
+        Transaction[] result = new Transaction[unpairedCount];
         int j = 0;
 
         for (int i = 0; i < total; i++) {
-            if (unpairedTransactions[i] == true) {
+            if (!unpairedTransactions[i]) {
                 result[j] = allTransaction[i];
                 j++;
             }
